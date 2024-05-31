@@ -205,9 +205,9 @@ class FFAppState extends ChangeNotifier {
     _dates.insert(index, value);
   }
 
-  double _quantity = 0.0;
-  double get quantity => _quantity;
-  set quantity(double value) {
+  int _quantity = 0;
+  int get quantity => _quantity;
+  set quantity(int value) {
     _quantity = value;
   }
 }

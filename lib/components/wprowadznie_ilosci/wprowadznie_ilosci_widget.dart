@@ -8,10 +8,10 @@ export 'wprowadznie_ilosci_model.dart';
 class WprowadznieIlosciWidget extends StatefulWidget {
   const WprowadznieIlosciWidget({
     super.key,
-    double? ileproduktu,
-  }) : ileproduktu = ileproduktu ?? 0.0;
+    int? ileproduktu,
+  }) : ileproduktu = ileproduktu ?? 0;
 
-  final double ileproduktu;
+  final int ileproduktu;
 
   @override
   State<WprowadznieIlosciWidget> createState() =>
@@ -162,7 +162,7 @@ class _WprowadznieIlosciWidgetState extends State<WprowadznieIlosciWidget> {
                     logFirebaseEvent('WPROWADZNIE_ILOSCI_COMP_OK_BTN_ON_TAP');
                     logFirebaseEvent('Button_update_app_state');
                     FFAppState().quantity =
-                        double.parse(_model.textController.text);
+                        int.parse(_model.textController.text);
                     logFirebaseEvent('Button_close_dialog,_drawer,_etc');
                     Navigator.pop(context);
                   },

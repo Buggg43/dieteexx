@@ -253,7 +253,9 @@ class _MenuWidgetState extends State<MenuWidget> with TickerProviderStateMixin {
                                                   (value) => setState(() {}));
 
                                               if (functions.checkIfNot0(
-                                                  FFAppState().quantity)) {
+                                                  FFAppState()
+                                                      .quantity
+                                                      .toDouble())) {
                                                 logFirebaseEvent(
                                                     'ScanerIconButton_backend_call');
                                                 _model.apiResultgy5 =
@@ -309,6 +311,36 @@ class _MenuWidgetState extends State<MenuWidget> with TickerProviderStateMixin {
                                                       (alertDialogContext) {
                                                     return WebViewAware(
                                                       child: AlertDialog(
+                                                        title: Text((_model
+                                                                    .apiResultgy5
+                                                                    ?.statusCode ??
+                                                                200)
+                                                            .toString()),
+                                                        content: Text((_model
+                                                                    .apiResultgy5
+                                                                    ?.succeeded ??
+                                                                true)
+                                                            .toString()),
+                                                        actions: [
+                                                          TextButton(
+                                                            onPressed: () =>
+                                                                Navigator.pop(
+                                                                    alertDialogContext),
+                                                            child: const Text('Ok'),
+                                                          ),
+                                                        ],
+                                                      ),
+                                                    );
+                                                  },
+                                                );
+                                                logFirebaseEvent(
+                                                    'ScanerIconButton_alert_dialog');
+                                                await showDialog(
+                                                  context: context,
+                                                  builder:
+                                                      (alertDialogContext) {
+                                                    return WebViewAware(
+                                                      child: AlertDialog(
                                                         title: Text(
                                                             BarcodereadGroup
                                                                 .barcodegetCall
@@ -353,133 +385,6 @@ class _MenuWidgetState extends State<MenuWidget> with TickerProviderStateMixin {
                                                           ''),
                                                       FFAppState().quantity),
                                                 );
-                                                logFirebaseEvent(
-                                                    'ScanerIconButton_alert_dialog');
-                                                await showDialog(
-                                                  context: context,
-                                                  builder:
-                                                      (alertDialogContext) {
-                                                    return WebViewAware(
-                                                      child: AlertDialog(
-                                                        title: Text((_model
-                                                                    .apiResultgy5
-                                                                    ?.statusCode ??
-                                                                200)
-                                                            .toString()),
-                                                        content: Text((_model
-                                                                    .apiResultgy5
-                                                                    ?.succeeded ??
-                                                                true)
-                                                            .toString()),
-                                                        actions: [
-                                                          TextButton(
-                                                            onPressed: () =>
-                                                                Navigator.pop(
-                                                                    alertDialogContext),
-                                                            child: const Text('Ok'),
-                                                          ),
-                                                        ],
-                                                      ),
-                                                    );
-                                                  },
-                                                );
-                                                logFirebaseEvent(
-                                                    'ScanerIconButton_backend_call');
-
-                                                await NutrientRecord.createDoc(
-                                                        _model.mealDocRef!)
-                                                    .set(
-                                                        createNutrientRecordData(
-                                                  protein:
-                                                      valueOrDefault<double>(
-                                                    BarcodereadGroup
-                                                        .barcodegetCall
-                                                        .proteins100g(
-                                                      (_model.apiResultgy5
-                                                              ?.jsonBody ??
-                                                          ''),
-                                                    ),
-                                                    0.0,
-                                                  ),
-                                                  carbohydrates:
-                                                      valueOrDefault<double>(
-                                                    BarcodereadGroup
-                                                        .barcodegetCall
-                                                        .carbohydrates100g(
-                                                      (_model.apiResultgy5
-                                                              ?.jsonBody ??
-                                                          ''),
-                                                    ),
-                                                    0.0,
-                                                  ),
-                                                  fiber: valueOrDefault<double>(
-                                                    BarcodereadGroup
-                                                        .barcodegetCall
-                                                        .fiber(
-                                                          (_model.apiResultgy5
-                                                                  ?.jsonBody ??
-                                                              ''),
-                                                        )
-                                                        ?.first,
-                                                    0.0,
-                                                  ),
-                                                  fats: valueOrDefault<double>(
-                                                    BarcodereadGroup
-                                                        .barcodegetCall
-                                                        .fat100g(
-                                                      (_model.apiResultgy5
-                                                              ?.jsonBody ??
-                                                          ''),
-                                                    ),
-                                                    0.0,
-                                                  ),
-                                                  sugars:
-                                                      valueOrDefault<double>(
-                                                    BarcodereadGroup
-                                                        .barcodegetCall
-                                                        .sugars100g(
-                                                      (_model.apiResultgy5
-                                                              ?.jsonBody ??
-                                                          ''),
-                                                    ),
-                                                    0.0,
-                                                  ),
-                                                  salt: valueOrDefault<double>(
-                                                    BarcodereadGroup
-                                                        .barcodegetCall
-                                                        .salt1000g(
-                                                      (_model.apiResultgy5
-                                                              ?.jsonBody ??
-                                                          ''),
-                                                    ),
-                                                    0.0,
-                                                  ),
-                                                  calories:
-                                                      valueOrDefault<double>(
-                                                    BarcodereadGroup
-                                                        .barcodegetCall
-                                                        .energy100g(
-                                                      (_model.apiResultgy5
-                                                              ?.jsonBody ??
-                                                          ''),
-                                                    ),
-                                                    0.0,
-                                                  ),
-                                                  water: BarcodereadGroup
-                                                      .barcodegetCall
-                                                      .water(
-                                                    (_model.apiResultgy5
-                                                            ?.jsonBody ??
-                                                        ''),
-                                                  ),
-                                                  name: BarcodereadGroup
-                                                      .barcodegetCall
-                                                      .name(
-                                                    (_model.apiResultgy5
-                                                            ?.jsonBody ??
-                                                        ''),
-                                                  ),
-                                                ));
                                                 logFirebaseEvent(
                                                     'ScanerIconButton_alert_dialog');
                                                 await showDialog(
