@@ -344,28 +344,28 @@ MealStruct transformMealData(
 
   // Convert energy from kJ to kcal
   double convertEnergy(double kJ) => kJ / 4.18;
-
+  double dzielnik = 100.00;
   // Extract and transform the data
   return MealStruct(
     name: apiData['product']['brands'] ?? 'Unknown',
     protein: (apiData['product']['nutriments']['proteins_100g'] ?? 0.0) *
-        (quantity / 100),
+        (quantity / dzielnik),
     carbohydrates:
         (apiData['product']['nutriments']['carbohydrates_100g'] ?? 0.0) *
-            (quantity / 100),
+            (quantity / dzielnik),
     fiber: (apiData['product']['nutriments']['fiber_100g'] ?? 0.0) *
-        (quantity / 100),
+        (quantity / dzielnik),
     fats: (apiData['product']['nutriments']['fat_100g'] ?? 0.0) *
-        (quantity / 100),
+        (quantity / dzielnik),
     sugars: (apiData['product']['nutriments']['sugars_100g'] ?? 0.0) *
-        (quantity / 100),
+        (quantity / dzielnik),
     salt: (apiData['product']['nutriments']['salt_100g'] ?? 0.0) *
-        (quantity / 100),
+        (quantity / dzielnik),
     calories:
         convertEnergy(apiData['product']['nutriments']['energy_100g'] ?? 0.0) *
-            (quantity / 100),
-    water:
-        (apiData['product']['nutriments']['water'] ?? 0.0) * (quantity / 100),
+            (quantity / dzielnik),
+    water: (apiData['product']['nutriments']['water'] ?? 0.0) *
+        (quantity / dzielnik),
   );
 }
 
