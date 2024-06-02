@@ -28,6 +28,7 @@ class _ProfileWidgetState extends State<ProfileWidget> {
     _model = createModel(context, () => ProfileModel());
 
     logFirebaseEvent('screen_view', parameters: {'screen_name': 'Profile'});
+    WidgetsBinding.instance.addPostFrameCallback((_) => setState(() {}));
   }
 
   @override

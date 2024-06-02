@@ -51,6 +51,8 @@ class _LegendaWagaWidgetState extends State<LegendaWagaWidget>
           !anim.applyInitialState),
       this,
     );
+
+    WidgetsBinding.instance.addPostFrameCallback((_) => setState(() {}));
   }
 
   @override

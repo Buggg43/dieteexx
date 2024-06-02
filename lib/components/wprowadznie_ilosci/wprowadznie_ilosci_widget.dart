@@ -38,6 +38,8 @@ class _WprowadznieIlosciWidgetState extends State<WprowadznieIlosciWidget> {
       '0',
     ));
     _model.textFieldFocusNode ??= FocusNode();
+
+    WidgetsBinding.instance.addPostFrameCallback((_) => setState(() {}));
   }
 
   @override

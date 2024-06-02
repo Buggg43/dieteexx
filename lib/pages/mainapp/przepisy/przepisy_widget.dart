@@ -26,6 +26,7 @@ class _PrzepisyWidgetState extends State<PrzepisyWidget> {
     _model = createModel(context, () => PrzepisyModel());
 
     logFirebaseEvent('screen_view', parameters: {'screen_name': 'Przepisy'});
+    WidgetsBinding.instance.addPostFrameCallback((_) => setState(() {}));
   }
 
   @override

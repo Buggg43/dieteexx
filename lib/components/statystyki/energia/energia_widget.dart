@@ -69,6 +69,8 @@ class _EnergiaWidgetState extends State<EnergiaWidget>
           !anim.applyInitialState),
       this,
     );
+
+    WidgetsBinding.instance.addPostFrameCallback((_) => setState(() {}));
   }
 
   @override

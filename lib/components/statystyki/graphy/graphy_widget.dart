@@ -33,6 +33,8 @@ class _GraphyWidgetState extends State<GraphyWidget> {
   void initState() {
     super.initState();
     _model = createModel(context, () => GraphyModel());
+
+    WidgetsBinding.instance.addPostFrameCallback((_) => setState(() {}));
   }
 
   @override

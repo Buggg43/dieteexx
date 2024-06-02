@@ -122,6 +122,8 @@ class _MenuWidgetState extends State<MenuWidget> with TickerProviderStateMixin {
           !anim.applyInitialState),
       this,
     );
+
+    WidgetsBinding.instance.addPostFrameCallback((_) => setState(() {}));
   }
 
   @override
@@ -274,43 +276,6 @@ class _MenuWidgetState extends State<MenuWidget> with TickerProviderStateMixin {
                                                       (alertDialogContext) {
                                                     return WebViewAware(
                                                       child: AlertDialog(
-                                                        content: Text((MealStruct.maybeFromMap(functions
-                                                                    .transformMealData(
-                                                                        (_model.apiResultgy5?.jsonBody ??
-                                                                            ''),
-                                                                        FFAppState()
-                                                                            .quantity)
-                                                                    .toMap())!
-                                                                .toMap())
-                                                            .toString()),
-                                                        actions: [
-                                                          TextButton(
-                                                            onPressed: () =>
-                                                                Navigator.pop(
-                                                                    alertDialogContext),
-                                                            child: const Text('Ok'),
-                                                          ),
-                                                        ],
-                                                      ),
-                                                    );
-                                                  },
-                                                );
-                                                logFirebaseEvent(
-                                                    'ScanerIconButton_custom_action');
-                                                _model.mealDocRef = await actions
-                                                    .saveMealsDataIfNotExists(
-                                                  currentUserReference!,
-                                                  _model
-                                                      .dataBarModel.datestate!,
-                                                );
-                                                logFirebaseEvent(
-                                                    'ScanerIconButton_alert_dialog');
-                                                await showDialog(
-                                                  context: context,
-                                                  builder:
-                                                      (alertDialogContext) {
-                                                    return WebViewAware(
-                                                      child: AlertDialog(
                                                         title: Text((_model
                                                                     .apiResultgy5
                                                                     ?.statusCode ??
@@ -332,6 +297,14 @@ class _MenuWidgetState extends State<MenuWidget> with TickerProviderStateMixin {
                                                       ),
                                                     );
                                                   },
+                                                );
+                                                logFirebaseEvent(
+                                                    'ScanerIconButton_custom_action');
+                                                _model.mealDocRef = await actions
+                                                    .saveMealsDataIfNotExists(
+                                                  currentUserReference!,
+                                                  _model
+                                                      .dataBarModel.datestate!,
                                                 );
                                                 logFirebaseEvent(
                                                     'ScanerIconButton_alert_dialog');

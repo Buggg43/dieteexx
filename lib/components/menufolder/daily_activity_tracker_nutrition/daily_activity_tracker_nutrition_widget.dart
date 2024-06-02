@@ -42,6 +42,8 @@ class _DailyActivityTrackerNutritionWidgetState
         currentUserReference!,
       );
     });
+
+    WidgetsBinding.instance.addPostFrameCallback((_) => setState(() {}));
   }
 
   @override

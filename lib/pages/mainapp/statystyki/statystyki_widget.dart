@@ -1,9 +1,15 @@
+import '/auth/firebase_auth/auth_util.dart';
 import '/components/menufolder/dark_and_light_mode/dark_and_light_mode_widget.dart';
-import '/components/statystyki/waga/waga_widget.dart';
+import '/components/statystyki/legenda_waga/legenda_waga_widget.dart';
 import '/flutter_flow/flutter_flow_icon_button.dart';
 import '/flutter_flow/flutter_flow_theme.dart';
 import '/flutter_flow/flutter_flow_util.dart';
+import '/custom_code/actions/index.dart' as actions;
+import '/custom_code/widgets/index.dart' as custom_widgets;
+import '/flutter_flow/custom_functions.dart' as functions;
 import 'package:flutter/material.dart';
+import 'package:flutter/scheduler.dart';
+import 'package:provider/provider.dart';
 import 'package:webviewx_plus/webviewx_plus.dart';
 import 'statystyki_model.dart';
 export 'statystyki_model.dart';
@@ -39,6 +45,17 @@ class _StatystykiWidgetState extends State<StatystykiWidget> {
     _model = createModel(context, () => StatystykiModel());
 
     logFirebaseEvent('screen_view', parameters: {'screen_name': 'Statystyki'});
+    // On page load action.
+    SchedulerBinding.instance.addPostFrameCallback((_) async {
+      logFirebaseEvent('STATYSTYKI_PAGE_Statystyki_ON_INIT_STATE');
+      logFirebaseEvent('Statystyki_custom_action');
+      await actions.fetchMonthlyCalories(
+        currentUserReference!,
+        getCurrentTimestamp,
+      );
+    });
+
+    WidgetsBinding.instance.addPostFrameCallback((_) => setState(() {}));
   }
 
   @override
@@ -50,6 +67,8 @@ class _StatystykiWidgetState extends State<StatystykiWidget> {
 
   @override
   Widget build(BuildContext context) {
+    context.watch<FFAppState>();
+
     return GestureDetector(
       onTap: () => _model.unfocusNode.canRequestFocus
           ? FocusScope.of(context).requestFocus(_model.unfocusNode)
@@ -369,88 +388,103 @@ class _StatystykiWidgetState extends State<StatystykiWidget> {
             ),
           ),
         ),
-        body: Column(
-          mainAxisSize: MainAxisSize.max,
-          children: [
-            Padding(
-              padding: const EdgeInsetsDirectional.fromSTEB(0.0, 30.0, 0.0, 0.0),
-              child: Column(
-                mainAxisSize: MainAxisSize.max,
-                mainAxisAlignment: MainAxisAlignment.start,
-                crossAxisAlignment: CrossAxisAlignment.center,
-                children: [
-                  Container(
-                    width: double.infinity,
-                    height: 70.0,
-                    decoration: BoxDecoration(
-                      color: FlutterFlowTheme.of(context).primaryBackground,
-                    ),
-                    child: Row(
-                      mainAxisSize: MainAxisSize.max,
-                      mainAxisAlignment: MainAxisAlignment.center,
-                      crossAxisAlignment: CrossAxisAlignment.center,
-                      children: [
-                        Expanded(
-                          child: Padding(
-                            padding: const EdgeInsetsDirectional.fromSTEB(
-                                30.0, 0.0, 0.0, 0.0),
-                            child: Text(
-                              'Statystyki',
-                              textAlign: TextAlign.center,
-                              style: FlutterFlowTheme.of(context)
-                                  .bodyMedium
-                                  .override(
+        body: Padding(
+          padding: const EdgeInsetsDirectional.fromSTEB(0.0, 20.0, 0.0, 0.0),
+          child: Column(
+            mainAxisSize: MainAxisSize.min,
+            children: [
+              Container(
+                width: double.infinity,
+                height: 70.0,
+                decoration: BoxDecoration(
+                  color: FlutterFlowTheme.of(context).primaryBackground,
+                ),
+                child: Row(
+                  mainAxisSize: MainAxisSize.max,
+                  mainAxisAlignment: MainAxisAlignment.center,
+                  crossAxisAlignment: CrossAxisAlignment.center,
+                  children: [
+                    Expanded(
+                      child: Padding(
+                        padding:
+                            const EdgeInsetsDirectional.fromSTEB(30.0, 0.0, 0.0, 0.0),
+                        child: Text(
+                          'Statystyki',
+                          textAlign: TextAlign.center,
+                          style:
+                              FlutterFlowTheme.of(context).bodyMedium.override(
                                     fontFamily: 'Readex Pro',
                                     fontSize: 25.0,
                                     letterSpacing: 0.0,
                                   ),
-                            ),
-                          ),
                         ),
-                        FlutterFlowIconButton(
-                          borderRadius: 20.0,
-                          borderWidth: 1.0,
-                          buttonSize: 40.0,
-                          icon: Icon(
-                            Icons.menu,
-                            color: FlutterFlowTheme.of(context).primaryText,
-                            size: 24.0,
-                          ),
-                          onPressed: () async {
-                            logFirebaseEvent('STATYSTYKI_PAGE_menu_ICN_ON_TAP');
-                            logFirebaseEvent('IconButton_drawer');
-                            scaffoldKey.currentState!.openDrawer();
-                          },
-                        ),
-                      ].divide(const SizedBox(width: 5.0)),
+                      ),
                     ),
-                  ),
-                  SingleChildScrollView(
-                    child: Column(
-                      mainAxisSize: MainAxisSize.max,
-                      children: [
-                        Container(
-                          width: MediaQuery.sizeOf(context).width * 1.0,
-                          height: MediaQuery.sizeOf(context).height * 1.0,
-                          decoration: BoxDecoration(
-                            color: FlutterFlowTheme.of(context)
-                                .secondaryBackground,
-                          ),
-                          child: wrapWithModel(
-                            model: _model.wagaModel,
-                            updateCallback: () => setState(() {}),
-                            child: const WagaWidget(
-                              parameter1: false,
-                            ),
-                          ),
-                        ),
-                      ],
+                    FlutterFlowIconButton(
+                      borderRadius: 20.0,
+                      borderWidth: 1.0,
+                      buttonSize: 40.0,
+                      icon: Icon(
+                        Icons.menu,
+                        color: FlutterFlowTheme.of(context).primaryText,
+                        size: 24.0,
+                      ),
+                      onPressed: () async {
+                        logFirebaseEvent('STATYSTYKI_PAGE_menu_ICN_ON_TAP');
+                        logFirebaseEvent('IconButton_drawer');
+                        scaffoldKey.currentState!.openDrawer();
+                      },
                     ),
-                  ),
-                ],
+                  ].divide(const SizedBox(width: 5.0)),
+                ),
               ),
-            ),
-          ],
+              Expanded(
+                child: Container(
+                  width: MediaQuery.sizeOf(context).width * 1.0,
+                  height: 100.0,
+                  decoration: BoxDecoration(
+                    color: FlutterFlowTheme.of(context).secondaryBackground,
+                  ),
+                  child: Column(
+                    mainAxisSize: MainAxisSize.max,
+                    children: [
+                      Expanded(
+                        child: AuthUserStreamWidget(
+                          builder: (context) => SizedBox(
+                            width: 400.0,
+                            height: 400.0,
+                            child: custom_widgets.LineChartWidget(
+                              width: 400.0,
+                              height: 400.0,
+                              dCalories: FFAppState().ddCalories,
+                              neededCalories: valueOrDefault<double>(
+                                functions.doublecalculateCalorieRequirement(
+                                    currentUserDocument!.dateOfBirth!,
+                                    valueOrDefault(
+                                        currentUserDocument?.weight, 0.0),
+                                    valueOrDefault(
+                                        currentUserDocument?.targetWeight, 0.0),
+                                    currentUserDocument!.gender!,
+                                    valueOrDefault(
+                                        currentUserDocument?.height, 0.0)),
+                                0.0,
+                              ),
+                              dates: FFAppState().dates,
+                            ),
+                          ),
+                        ),
+                      ),
+                      wrapWithModel(
+                        model: _model.legendaWagaModel,
+                        updateCallback: () => setState(() {}),
+                        child: const LegendaWagaWidget(),
+                      ),
+                    ],
+                  ),
+                ),
+              ),
+            ],
+          ),
         ),
       ),
     );

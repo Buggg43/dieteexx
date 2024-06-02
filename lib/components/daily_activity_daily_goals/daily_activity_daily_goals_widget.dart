@@ -42,6 +42,8 @@ class _DailyActivityDailyGoalsWidgetState
         currentUserReference!,
       );
     });
+
+    WidgetsBinding.instance.addPostFrameCallback((_) => setState(() {}));
   }
 
   @override

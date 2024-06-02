@@ -24,6 +24,7 @@ class _EmailveryWidgetState extends State<EmailveryWidget> {
     _model = createModel(context, () => EmailveryModel());
 
     logFirebaseEvent('screen_view', parameters: {'screen_name': 'Emailvery'});
+    WidgetsBinding.instance.addPostFrameCallback((_) => setState(() {}));
   }
 
   @override

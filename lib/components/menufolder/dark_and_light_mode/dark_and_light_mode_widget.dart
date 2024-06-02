@@ -78,6 +78,8 @@ class _DarkAndLightModeWidgetState extends State<DarkAndLightModeWidget>
           !anim.applyInitialState),
       this,
     );
+
+    WidgetsBinding.instance.addPostFrameCallback((_) => setState(() {}));
   }
 
   @override

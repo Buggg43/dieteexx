@@ -64,6 +64,8 @@ class _DaneOsobyWidgetState extends State<DaneOsobyWidget> {
     _model.textFieldFocusNode3 ??= FocusNode();
 
     _model.textFieldFocusNode4 ??= FocusNode();
+
+    WidgetsBinding.instance.addPostFrameCallback((_) => setState(() {}));
   }
 
   @override

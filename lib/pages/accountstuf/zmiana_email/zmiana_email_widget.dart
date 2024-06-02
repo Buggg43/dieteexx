@@ -27,6 +27,8 @@ class _ZmianaEmailWidgetState extends State<ZmianaEmailWidget> {
     logFirebaseEvent('screen_view', parameters: {'screen_name': 'ZmianaEmail'});
     _model.emailTextController ??= TextEditingController();
     _model.textFieldFocusNode ??= FocusNode();
+
+    WidgetsBinding.instance.addPostFrameCallback((_) => setState(() {}));
   }
 
   @override

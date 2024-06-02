@@ -88,6 +88,8 @@ class _DataBarWidgetState extends State<DataBarWidget>
           !anim.applyInitialState),
       this,
     );
+
+    WidgetsBinding.instance.addPostFrameCallback((_) => setState(() {}));
   }
 
   @override
@@ -128,15 +130,15 @@ class _DataBarWidgetState extends State<DataBarWidget>
                       logFirebaseEvent('LeftIconButton_update_component_state');
                       _model.datestate =
                           functions.functionminus1day(_model.datestate);
+                      logFirebaseEvent('LeftIconButton_custom_action');
+                      await actions.updateDailyIntakeStates(
+                        functions.functionminus1day(_model.datestate)!,
+                        currentUserReference!,
+                      );
                       logFirebaseEvent('LeftIconButton_update_app_state');
                       FFAppState().dataselected = functions
                           .functionminus1day(FFAppState().dataselected);
                       FFAppState().update(() {});
-                      logFirebaseEvent('LeftIconButton_custom_action');
-                      await actions.updateDailyIntakeStates(
-                        FFAppState().dataselected!,
-                        currentUserReference!,
-                      );
                     },
                   ).animateOnActionTrigger(
                     animationsMap['iconButtonOnActionTriggerAnimation1']!,
@@ -253,15 +255,15 @@ class _DataBarWidgetState extends State<DataBarWidget>
                     logFirebaseEvent('DATA_BAR_COMP_RightIconButton_ON_TAP');
                     logFirebaseEvent('RightIconButton_update_component_state');
                     _model.datestate = functions.addplus1day(_model.datestate);
+                    logFirebaseEvent('RightIconButton_custom_action');
+                    await actions.updateDailyIntakeStates(
+                      functions.addplus1day(_model.datestate)!,
+                      currentUserReference!,
+                    );
                     logFirebaseEvent('RightIconButton_update_app_state');
                     FFAppState().dataselected =
                         functions.addplus1day(FFAppState().dataselected);
                     FFAppState().update(() {});
-                    logFirebaseEvent('RightIconButton_custom_action');
-                    await actions.updateDailyIntakeStates(
-                      FFAppState().dataselected!,
-                      currentUserReference!,
-                    );
                   },
                 ).animateOnActionTrigger(
                   animationsMap['iconButtonOnActionTriggerAnimation2']!,

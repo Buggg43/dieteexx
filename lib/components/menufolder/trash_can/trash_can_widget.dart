@@ -24,6 +24,8 @@ class _TrashCanWidgetState extends State<TrashCanWidget> {
   void initState() {
     super.initState();
     _model = createModel(context, () => TrashCanModel());
+
+    WidgetsBinding.instance.addPostFrameCallback((_) => setState(() {}));
   }
 
   @override
