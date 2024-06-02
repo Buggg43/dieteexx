@@ -1,6 +1,5 @@
 import '/auth/firebase_auth/auth_util.dart';
 import '/backend/api_requests/api_calls.dart';
-import '/backend/backend.dart';
 import '/components/drawer/drawer_widget.dart';
 import '/components/menufolder/daily_activity_tracker_nutrition/daily_activity_tracker_nutrition_widget.dart';
 import '/components/menufolder/data_bar/data_bar_widget.dart';
@@ -12,9 +11,11 @@ import '/flutter_flow/flutter_flow_theme.dart';
 import '/flutter_flow/flutter_flow_util.dart';
 import '/custom_code/actions/index.dart' as actions;
 import '/flutter_flow/custom_functions.dart' as functions;
+import '/flutter_flow/permissions_util.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/scheduler.dart';
 import 'package:flutter_animate/flutter_animate.dart';
+import 'package:flutter_barcode_scanner/flutter_barcode_scanner.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import 'package:provider/provider.dart';
 import 'package:webviewx_plus/webviewx_plus.dart';
@@ -44,14 +45,22 @@ class _MenuWidgetState extends State<MenuWidget> with TickerProviderStateMixin {
     // On page load action.
     SchedulerBinding.instance.addPostFrameCallback((_) async {
       logFirebaseEvent('MENU_PAGE_Menu_ON_INIT_STATE');
-      logFirebaseEvent('Menu_custom_action');
-      await actions.updateDailyIntakeStates(
-        getCurrentTimestamp,
-        currentUserReference!,
-      );
       if (valueOrDefault<bool>(currentUserDocument?.usersetdata, false)) {
-        logFirebaseEvent('Menu_firestore_query');
-        await queryNutrientRecordOnce();
+        if (FFAppState().firstloadmenu) {
+          logFirebaseEvent('Menu_update_app_state');
+          FFAppState().dataselected = getCurrentTimestamp;
+          setState(() {});
+          logFirebaseEvent('Menu_update_app_state');
+          FFAppState().firstloadmenu = false;
+        }
+        logFirebaseEvent('Menu_custom_action');
+        await actions.updateDailyIntakeStates(
+          getCurrentTimestamp,
+          currentUserReference!,
+        );
+        logFirebaseEvent('Menu_update_app_state');
+
+        FFAppState().update(() {});
       } else {
         logFirebaseEvent('Menu_navigate_to');
 
@@ -74,17 +83,6 @@ class _MenuWidgetState extends State<MenuWidget> with TickerProviderStateMixin {
             );
           },
         );
-      }
-
-      logFirebaseEvent('Menu_update_app_state');
-      FFAppState().dataselected = _model.dataBarModel.datestate;
-      setState(() {});
-      if (FFAppState().firstloadmenu) {
-        logFirebaseEvent('Menu_update_app_state');
-        FFAppState().dataselected = getCurrentTimestamp;
-        setState(() {});
-        logFirebaseEvent('Menu_update_app_state');
-        FFAppState().firstloadmenu = false;
       }
     });
 
@@ -206,8 +204,49 @@ class _MenuWidgetState extends State<MenuWidget> with TickerProviderStateMixin {
                                         onPressed: () async {
                                           logFirebaseEvent(
                                               'MENU_PAGE_ScanerIconButton_ON_TAP');
-                                          if (true) {
-                                            if (true) {
+                                          logFirebaseEvent(
+                                              'ScanerIconButton_request_permissions');
+                                          await requestPermission(
+                                              cameraPermission);
+                                          if (await getPermissionStatus(
+                                              cameraPermission)) {
+                                            logFirebaseEvent(
+                                                'ScanerIconButton_scan_barcode_q_r_code');
+                                            _model.barcodescaned =
+                                                await FlutterBarcodeScanner
+                                                    .scanBarcode(
+                                              '#C62828', // scanning line color
+                                              'Cancel', // cancel button text
+                                              true, // whether to show the flash icon
+                                              ScanMode.BARCODE,
+                                            );
+
+                                            if (functions.validateBarcode(
+                                                _model.barcodescaned)) {
+                                              logFirebaseEvent(
+                                                  'ScanerIconButton_alert_dialog');
+                                              await showDialog(
+                                                context: context,
+                                                builder: (alertDialogContext) {
+                                                  return WebViewAware(
+                                                    child: AlertDialog(
+                                                      title: const Text('Twój kod:'),
+                                                      content: Text(functions
+                                                          .sanitizeBarcode(_model
+                                                              .barcodescaned)
+                                                          .toString()),
+                                                      actions: [
+                                                        TextButton(
+                                                          onPressed: () =>
+                                                              Navigator.pop(
+                                                                  alertDialogContext),
+                                                          child: const Text('Ok'),
+                                                        ),
+                                                      ],
+                                                    ),
+                                                  );
+                                                },
+                                              );
                                               logFirebaseEvent(
                                                   'ScanerIconButton_alert_dialog');
                                               await showDialog(
@@ -259,6 +298,11 @@ class _MenuWidgetState extends State<MenuWidget> with TickerProviderStateMixin {
                                                       .quantity
                                                       .toDouble())) {
                                                 logFirebaseEvent(
+                                                    'ScanerIconButton_update_app_state');
+                                                FFAppState().barcodeValue =
+                                                    functions.sanitizeBarcode(
+                                                        _model.barcodescaned);
+                                                logFirebaseEvent(
                                                     'ScanerIconButton_backend_call');
                                                 _model.apiResultgy5 =
                                                     await BarcodereadGroup
@@ -269,83 +313,12 @@ class _MenuWidgetState extends State<MenuWidget> with TickerProviderStateMixin {
                                                       .toString(),
                                                 );
                                                 logFirebaseEvent(
-                                                    'ScanerIconButton_alert_dialog');
-                                                await showDialog(
-                                                  context: context,
-                                                  builder:
-                                                      (alertDialogContext) {
-                                                    return WebViewAware(
-                                                      child: AlertDialog(
-                                                        title: Text((_model
-                                                                    .apiResultgy5
-                                                                    ?.statusCode ??
-                                                                200)
-                                                            .toString()),
-                                                        content: Text((_model
-                                                                    .apiResultgy5
-                                                                    ?.succeeded ??
-                                                                true)
-                                                            .toString()),
-                                                        actions: [
-                                                          TextButton(
-                                                            onPressed: () =>
-                                                                Navigator.pop(
-                                                                    alertDialogContext),
-                                                            child: const Text('Ok'),
-                                                          ),
-                                                        ],
-                                                      ),
-                                                    );
-                                                  },
-                                                );
-                                                logFirebaseEvent(
                                                     'ScanerIconButton_custom_action');
                                                 _model.mealDocRef = await actions
                                                     .saveMealsDataIfNotExists(
                                                   currentUserReference!,
                                                   _model
                                                       .dataBarModel.datestate!,
-                                                );
-                                                logFirebaseEvent(
-                                                    'ScanerIconButton_alert_dialog');
-                                                await showDialog(
-                                                  context: context,
-                                                  builder:
-                                                      (alertDialogContext) {
-                                                    return WebViewAware(
-                                                      child: AlertDialog(
-                                                        title: Text(
-                                                            BarcodereadGroup
-                                                                .barcodegetCall
-                                                                .energy100g(
-                                                                  (_model.apiResultgy5
-                                                                          ?.jsonBody ??
-                                                                      ''),
-                                                                )!
-                                                                .toString()),
-                                                        content: Text(
-                                                            valueOrDefault<
-                                                                String>(
-                                                          BarcodereadGroup
-                                                              .barcodegetCall
-                                                              .name(
-                                                            (_model.apiResultgy5
-                                                                    ?.jsonBody ??
-                                                                ''),
-                                                          ),
-                                                          'uknown',
-                                                        )),
-                                                        actions: [
-                                                          TextButton(
-                                                            onPressed: () =>
-                                                                Navigator.pop(
-                                                                    alertDialogContext),
-                                                            child: const Text('Ok'),
-                                                          ),
-                                                        ],
-                                                      ),
-                                                    );
-                                                  },
                                                 );
                                                 logFirebaseEvent(
                                                     'ScanerIconButton_custom_action');
@@ -359,28 +332,6 @@ class _MenuWidgetState extends State<MenuWidget> with TickerProviderStateMixin {
                                                       FFAppState().quantity),
                                                 );
                                                 logFirebaseEvent(
-                                                    'ScanerIconButton_alert_dialog');
-                                                await showDialog(
-                                                  context: context,
-                                                  builder:
-                                                      (alertDialogContext) {
-                                                    return WebViewAware(
-                                                      child: AlertDialog(
-                                                        title: const Text('ss'),
-                                                        content: const Text('ssss'),
-                                                        actions: [
-                                                          TextButton(
-                                                            onPressed: () =>
-                                                                Navigator.pop(
-                                                                    alertDialogContext),
-                                                            child: const Text('Ok'),
-                                                          ),
-                                                        ],
-                                                      ),
-                                                    );
-                                                  },
-                                                );
-                                                logFirebaseEvent(
                                                     'ScanerIconButton_custom_action');
                                                 await actions
                                                     .updateDailyIntakeStates(
@@ -389,26 +340,9 @@ class _MenuWidgetState extends State<MenuWidget> with TickerProviderStateMixin {
                                                   currentUserReference!,
                                                 );
                                                 logFirebaseEvent(
-                                                    'ScanerIconButton_alert_dialog');
-                                                await showDialog(
-                                                  context: context,
-                                                  builder:
-                                                      (alertDialogContext) {
-                                                    return WebViewAware(
-                                                      child: AlertDialog(
-                                                        title: const Text('finish'),
-                                                        actions: [
-                                                          TextButton(
-                                                            onPressed: () =>
-                                                                Navigator.pop(
-                                                                    alertDialogContext),
-                                                            child: const Text('Ok'),
-                                                          ),
-                                                        ],
-                                                      ),
-                                                    );
-                                                  },
-                                                );
+                                                    'ScanerIconButton_update_app_state');
+
+                                                FFAppState().update(() {});
                                               }
                                             } else {
                                               logFirebaseEvent(

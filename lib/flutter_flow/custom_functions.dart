@@ -344,28 +344,44 @@ MealStruct transformMealData(
 
   // Convert energy from kJ to kcal
   double convertEnergy(double kJ) => kJ / 4.18;
+  double toDouble(dynamic value) {
+    if (value is int) {
+      return value.toDouble();
+    } else if (value is double) {
+      return value;
+    } else {
+      return 0.0;
+    }
+  }
 
   // Extract and transform the data
   return MealStruct(
     name: apiData['product']['brands'] ?? 'Unknown',
-    protein: (apiData['product']['nutriments']['proteins_100g'] ?? 0.0) *
+    protein: ((apiData['product']['nutriments']['proteins_100g'] ?? 0.0) as num)
+            .toDouble() *
         (quantity / 100),
     carbohydrates:
-        (apiData['product']['nutriments']['carbohydrates_100g'] ?? 0.0) *
+        ((apiData['product']['nutriments']['carbohydrates_100g'] ?? 0.0) as num)
+                .toDouble() *
             (quantity / 100),
-    fiber: (apiData['product']['nutriments']['fiber_100g'] ?? 0.0) *
+    fiber: ((apiData['product']['nutriments']['fiber_100g'] ?? 0.0) as num)
+            .toDouble() *
         (quantity / 100),
-    fats: (apiData['product']['nutriments']['fat_100g'] ?? 0.0) *
+    fats: ((apiData['product']['nutriments']['fat_100g'] ?? 0.0) as num)
+            .toDouble() *
         (quantity / 100),
-    sugars: (apiData['product']['nutriments']['sugars_100g'] ?? 0.0) *
+    sugars: ((apiData['product']['nutriments']['sugars_100g'] ?? 0.0) as num)
+            .toDouble() *
         (quantity / 100),
-    salt: (apiData['product']['nutriments']['salt_100g'] ?? 0.0) *
+    salt: ((apiData['product']['nutriments']['salt_100g'] ?? 0.0) as num)
+            .toDouble() *
         (quantity / 100),
-    calories:
-        convertEnergy(apiData['product']['nutriments']['energy_100g'] ?? 0.0) *
-            (quantity / 100),
+    calories: convertEnergy(
+            toDouble(apiData['product']['nutriments']['energy_100g'] ?? 0.0)) *
+        (quantity / 100),
     water:
-        (apiData['product']['nutriments']['water'] ?? 0.0) * (quantity / 100),
+        ((apiData['product']['nutriments']['water'] ?? 0.0) as num).toDouble() *
+            (quantity / 100),
   );
 }
 

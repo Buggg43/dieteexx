@@ -10,6 +10,7 @@ class MenuModel extends FlutterFlowModel<MenuWidget> {
   ///  State fields for stateful widgets in this page.
 
   final unfocusNode = FocusNode();
+  var barcodescaned = '';
   // Stores action output result for [Backend Call - API (barcodeget)] action in ScanerIconButton widget.
   ApiCallResponse? apiResultgy5;
   // Stores action output result for [Custom Action - saveMealsDataIfNotExists] action in ScanerIconButton widget.

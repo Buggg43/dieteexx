@@ -53,6 +53,9 @@ class _StatystykiWidgetState extends State<StatystykiWidget> {
         currentUserReference!,
         getCurrentTimestamp,
       );
+      logFirebaseEvent('Statystyki_update_app_state');
+
+      FFAppState().update(() {});
     });
 
     WidgetsBinding.instance.addPostFrameCallback((_) => setState(() {}));
