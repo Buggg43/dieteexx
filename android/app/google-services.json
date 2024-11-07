@@ -1,0 +1,55 @@
+{
+  "project_info": {
+    "project_number": "472974310020",
+    "firebase_url": "https://dietetex-ite17h-default-rtdb.firebaseio.com",
+    "project_id": "dietetex-ite17h",
+    "storage_bucket": "dietetex-ite17h.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:472974310020:android:a18442794c5cc8f3d2a0d1",
+        "android_client_info": {
+          "package_name": "com.zaliczenie.dietetex"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "472974310020-p9l3lq18qa3iu3rs1cmaafmsgkvo3nat.apps.googleusercontent.com",
+          "client_type": 1,
+          "android_info": {
+            "package_name": "com.zaliczenie.dietetex",
+            "certificate_hash": "9bbb3186b2189ef16d8f272bdab59362c395cbb4"
+          }
+        },
+        {
+          "client_id": "472974310020-fh7lc8g0g8oes3v02aalj3crjun6qt4h.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyCnZMFbtb0aFvLdBaFWCztuapgckhrJu2M"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "472974310020-fh7lc8g0g8oes3v02aalj3crjun6qt4h.apps.googleusercontent.com",
+              "client_type": 3
+            },
+            {
+              "client_id": "472974310020-jcks1u2leq9ord1oolooem058otvaqeg.apps.googleusercontent.com",
+              "client_type": 2,
+              "ios_info": {
+                "bundle_id": "com.zaliczenie.dietetex"
+              }
+            }
+          ]
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}
